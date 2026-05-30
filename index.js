@@ -1,5 +1,4 @@
 const express = require("express");
-const Stripe = require("stripe");
 const nodemailer = require("nodemailer");
 const bodyParser = require("body-parser");
 const cors = require("cors");
@@ -19,9 +18,7 @@ const Payment = require("./models/payment");
 require("./db");
 require("dotenv").config();
 
-const stripe = new Stripe(
-  "sk_test_51TVpLJLxounSeQ56tm30fgr2hXqsHfgtdLSEeCFIYmmVENLLvueaSc9GtDKoSXKOGPJRLT42T746F1p6zxac2lxz00AmsMYpPk",
-);
+
 const app = express();
 app.use(cors());
 app.use(express.json());
