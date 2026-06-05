@@ -118,10 +118,10 @@ const studentSchema = new mongoose.Schema(
       match: [/^[0-9]{12}$/, "Aadhaar number must be 12 digits"],
     },
 
-    preferredLanguage: {
-      type: String,
-      required: [true, "Preferred language is required"],
-    },
+    // preferredLanguage: {
+    //   type: String,
+    //   required: [true, "Preferred language is required"],
+    // },
 
     // DISABILITY
     disability: {
@@ -136,37 +136,45 @@ const studentSchema = new mongoose.Schema(
     },
 
     // LOCATION
-    location: {
-      latitude: {
-        type: String,
-        required: [true, "Latitude is required"],
-      },
+    // location: {
+    //   latitude: {
+    //     type: String,
+    //     required: [true, "Latitude is required"],
+    //   },
 
-      longitude: {
-        type: String,
-        required: [true, "Longitude is required"],
-      },
+    //   longitude: {
+    //     type: String,
+    //     required: [true, "Longitude is required"],
+    //   },
 
-      city: {
-        type: String,
-        required: [true, "City is required"],
-      },
+    //   city: {
+    //     type: String,
+    //     required: [true, "City is required"],
+    //   },
 
-      state: {
-        type: String,
-        required: [true, "State is required"],
-      },
+    //   state: {
+    //     type: String,
+    //     required: [true, "State is required"],
+    //   },
 
-      pin: {
-        type: String,
-        required: [true, "PIN code is required"],
-        match: [/^[0-9]{6}$/, "PIN code must be 6 digits"],
-      },
+    //   pin: {
+    //     type: String,
+    //     required: [true, "PIN code is required"],
+    //     match: [/^[0-9]{6}$/, "PIN code must be 6 digits"],
+    //   },
 
-      address: {
-        type: String,
-        required: [true, "Address is required"],
-      },
+    //   address: {
+    //     type: String,
+    //     required: [true, "Address is required"],
+    //   },
+    // },
+    city: {
+      type: String,
+      required: [true, "City is required"],
+    },
+    state: {
+      type: String,
+      required: [true, "State is required"],
     },
   },
   {

@@ -1,5 +1,4 @@
-const Student = require("../models/student");
-
+const Student = require("../models/Student");
 
 // CREATE
 exports.createStudent = async (req, res) => {
@@ -9,7 +8,7 @@ exports.createStudent = async (req, res) => {
     if (req.file) {
       data.photo = req.file.path;
     }
-
+    console.log("data", data);
     const student = await Student.create(data);
 
     res.status(201).json({
@@ -24,7 +23,6 @@ exports.createStudent = async (req, res) => {
     });
   }
 };
-
 
 // GET ALL
 exports.getStudents = async (req, res) => {
@@ -42,7 +40,6 @@ exports.getStudents = async (req, res) => {
     });
   }
 };
-
 
 // GET SINGLE
 exports.getStudentById = async (req, res) => {
@@ -68,7 +65,6 @@ exports.getStudentById = async (req, res) => {
   }
 };
 
-
 // UPDATE
 exports.updateStudent = async (req, res) => {
   try {
@@ -78,11 +74,9 @@ exports.updateStudent = async (req, res) => {
       data.photo = req.file.path;
     }
 
-    const student = await Student.findByIdAndUpdate(
-      req.params.id,
-      data,
-      { new: true }
-    );
+    const student = await Student.findByIdAndUpdate(req.params.id, data, {
+      new: true,
+    });
 
     res.status(200).json({
       success: true,
@@ -96,7 +90,6 @@ exports.updateStudent = async (req, res) => {
     });
   }
 };
-
 
 // DELETE
 exports.deleteStudent = async (req, res) => {

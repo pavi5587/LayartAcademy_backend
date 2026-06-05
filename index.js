@@ -1,4 +1,5 @@
 const express = require("express");
+const Stripe = require("stripe");
 const nodemailer = require("nodemailer");
 const bodyParser = require("body-parser");
 const cors = require("cors");
@@ -12,13 +13,15 @@ const moduleRoutes = require("./routes/moduleRoutes");
 const contactRoutes = require("./routes/contactRoutes");
 const studentRoutes = require("./routes/studentRoutes");
 const historyRoutes = require("./routes/watchHistoryRoutes");
-const transporter = require("./config/mailer");
 const Payment = require("./models/payment");
+const watchProgressRoutes = require("./routes/watchProgressRoutes");
 
 require("./db");
 require("dotenv").config();
 
-
+const stripe = new Stripe(
+  "sk_test_51TVpLJLxounSeQ56tm30fgr2hXqsHfgtdLSEeCFIYmmVENLLvueaSc9GtDKoSXKOGPJRLT42T746F1p6zxac2lxz00AmsMYpPk",
+);
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -33,6 +36,7 @@ app.use("/api/modules", moduleRoutes);
 app.use("/api/contacts", contactRoutes);
 app.use("/api/students", studentRoutes);
 app.use("/api/watch-history", historyRoutes);
+app.use("/api/progress", watchProgressRoutes);
 
 const crypto = require("crypto");
 const razorpayKeyId = String(process.env.RAZORPAY_KEY_ID || "").trim();
@@ -116,45 +120,6 @@ app.post("/api/create-order", async (req, res) => {
   }
 });
 
-// app.post("/api/verify-payment", async (req, res) => {
-//   try {
-//     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
-//       req.body;
-//     console.log("req.body1", req.body);
-
-//     if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
-//       return res.status(400).json({
-//         success: false,
-//         message:
-//           "razorpay_order_id, razorpay_payment_id and razorpay_signature are required.",
-//       });
-//     }
-
-//     const body = razorpay_order_id + "|" + razorpay_payment_id;
-//     const expectedSignature = crypto
-//       .createHmac("sha256", razorpayKeySecret)
-//       .update(body.toString())
-//       .digest("hex");
-
-//     if (expectedSignature === razorpay_signature) {
-//       return res.json({
-//         success: true,
-//         paymentStatus: "Success",
-//       });
-//     }
-
-//     res.status(400).json({
-//       success: false,
-//       paymentStatus: "Failed",
-//       message: "Signature verification failed.",
-//     });
-//   } catch (error) {
-//     res.status(500).json({
-//       success: false,
-//       message: error.message || "Unable to verify payment signature.",
-//     });
-//   }
-// });
 
 app.post("/api/verify-payment", async (req, res) => {
   try {
@@ -199,13 +164,13 @@ app.post("/api/verify-payment", async (req, res) => {
       const transporter = nodemailer.createTransport({
         service: "gmail",
         auth: {
-          user: "pavir5587@gmail.com", // sender email
-          pass: "lbyf czql eybg ldsb", // Gmail App Password
+          user: "academy@layart.in", // sender email
+          pass: "fvpx jllc ziru ddhr", // Gmail App Password
         },
       });
 
       await transporter.sendMail({
-        from: "pavir5587@gmail.com",
+        from: "academy@layart.in",
 
         to: email,
 
@@ -370,5 +335,7 @@ app.get("/download-excel", (req, res) => {
 
   res.download(filePath);
 });
+
+
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

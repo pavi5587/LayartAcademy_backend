@@ -10,6 +10,9 @@ const videoSchema = new mongoose.Schema(
     description: { type: String },
     // videoFile: { type: String, required: true },
     fileId: { type: String, required: true },
+    price: { type: String, required: true },
+    originalPrice: { type: String, required: true },
+
     created: { type: Date, default: Date.now },
   },
   { timestamps: true },

@@ -11,6 +11,8 @@ exports.createVideo = async (req, res) => {
       thumbnailUrl,
       description,
       fileId,
+      price,
+      originalPrice,
     } = req.body;
     // if (!req.file) {
     //   return res.status(400).json({ error: "Video file is required" });
@@ -27,6 +29,8 @@ exports.createVideo = async (req, res) => {
       thumbnailUrl,
       description,
       fileId,
+      price,
+      originalPrice,
       // videoFile: req.file.path,
     });
     console.log("video", video);

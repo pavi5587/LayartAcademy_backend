@@ -15,15 +15,34 @@ const userSchema = new mongoose.Schema({
   },
   mobileNumber: {
     type: String,
-    required: true,
+    required: function () {
+      return !this.isGoogleUser;
+    },
   },
   password: {
     type: String,
-    required: true,
+    required: function () {
+      return !this.isGoogleUser;
+    },
   },
   course: {
     type: String,
   },
+  professional: {
+    type: String,
+  },
+  city: {
+    type: String,
+  },
+  googleId: {
+    type: String,
+  },
+  isGoogleUser: {
+    type: Boolean,
+    default: false,
+  },
+  resetToken: { type: String },
+  resetTokenExpire: { type: Date },
 });
 
 let schema = mongoose.model("User", userSchema);

@@ -1,4 +1,4 @@
-const Contact = require("../models/contact");
+const Contact = require("../models/Contact");
 const nodemailer = require("nodemailer");
 // Add new contact
 exports.addContact = async (req, res) => {
@@ -18,15 +18,15 @@ exports.addContact = async (req, res) => {
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "pavir5587@gmail.com", // sender email
-        pass: "lbyf czql eybg ldsb", // Gmail App Password
+        user: "academy@layart.in", // sender email
+        pass: "fvpx jllc ziru ddhr", // Gmail App Password
       },
     });
 
     // Email content
     const mailOptions = {
-      from: "pavir5587@gmail.com",
-      to: "pavip5587@gmail.com", // recipient
+      from: "academy@layart.in",
+      to: email, // recipient
       subject: `New Contact Form: ${subject}`,
       text: `
         Name: ${firstName} ${lastName}
