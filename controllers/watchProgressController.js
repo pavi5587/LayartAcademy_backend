@@ -1,4 +1,4 @@
-const WatchProgress = require("../models/WatchProgress");
+const WatchProgress = require("../models/watchProgress");
 
 function formatSeconds(s) {
   const h = Math.floor(s / 3600);
