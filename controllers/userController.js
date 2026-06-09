@@ -243,7 +243,7 @@ const forgotPassword = async (req, res) => {
       },
     });
 
-    const resetUrl = `https://layart.in/reset-password/${token}`;
+    const resetUrl = `https://layartacademy.in/reset-password/${token}`;
 
     await transporter.sendMail({
       from: "academy@layart.in", // sender email

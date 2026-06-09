@@ -120,7 +120,6 @@ app.post("/api/create-order", async (req, res) => {
   }
 });
 
-
 app.post("/api/verify-payment", async (req, res) => {
   try {
     const {
@@ -131,6 +130,7 @@ app.post("/api/verify-payment", async (req, res) => {
       name,
       course,
       amount,
+      modules,
     } = req.body;
 
     console.log("req.body", req.body);
@@ -239,7 +239,7 @@ app.post("/api/verify-payment", async (req, res) => {
         email,
         course,
         amount,
-
+        modules,
         razorpay_order_id,
         razorpay_payment_id,
         razorpay_signature,
@@ -335,7 +335,6 @@ app.get("/download-excel", (req, res) => {
 
   res.download(filePath);
 });
-
 
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

@@ -4,7 +4,16 @@ const paymentSchema = new mongoose.Schema(
   {
     name: String,
     email: String,
+
     course: String,
+
+    modules: [
+      {
+        module: String,
+        price: Number,
+      },
+    ],
+
     amount: Number,
 
     razorpay_order_id: String,
@@ -18,7 +27,7 @@ const paymentSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  },
+  }
 );
 
 module.exports = mongoose.model("Payment", paymentSchema);
