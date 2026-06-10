@@ -3,15 +3,34 @@ const Course = require("../models/course");
 // Create
 exports.addCourse = async (req, res) => {
   try {
-     const courseData = {
+    const courseData = {
       ...req.body,
-      image: req.file ? req.file.path : null
+      image: req.file ? req.file.path : null,
     };
+
+    // Parse stringified arrays
+    if (courseData.reviews) {
+      courseData.reviews = JSON.parse(courseData.reviews);
+    }
+
+    if (courseData.language) {
+      courseData.language = JSON.parse(courseData.language);
+    }
+
+    if (courseData.tags) {
+      courseData.tags = JSON.parse(courseData.tags);
+    }
+
     const course = new Course(courseData);
+
     await course.save();
+
     res.status(201).json(course);
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    console.error(err);
+    res.status(400).json({
+      error: err.message,
+    });
   }
 };
 
@@ -51,16 +70,36 @@ exports.getCourseByTitle = async (req, res) => {
 // Update
 exports.updateCourse = async (req, res) => {
   try {
-      const updateData = {
-      ...req.body,
-      ...(req.file && { image: req.file.path })
-    };
+    const updateData = { ...req.body };
+
+    // Convert stringified arrays back to arrays
+    if (updateData.reviews) {
+      updateData.reviews = JSON.parse(updateData.reviews);
+    }
+
+    if (updateData.language) {
+      updateData.language = JSON.parse(updateData.language);
+    }
+
+    if (updateData.tags) {
+      updateData.tags = JSON.parse(updateData.tags);
+    }
+
+    // If image uploaded
+    if (req.file) {
+      updateData.image = req.file.path; // or Cloudinary URL
+    }
+
     const course = await Course.findByIdAndUpdate(req.params.id, updateData, {
       new: true,
+      runValidators: true,
     });
+
     res.json(course);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
+  } catch (error) {
+    res.status(500).json({
+      error: error.message,
+    });
   }
 };
 
