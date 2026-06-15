@@ -15,6 +15,7 @@ const studentRoutes = require("./routes/studentRoutes");
 const historyRoutes = require("./routes/watchHistoryRoutes");
 const Payment = require("./models/payment");
 const watchProgressRoutes = require("./routes/watchProgressRoutes");
+const puppeteer = require("puppeteer");
 
 require("./db");
 require("dotenv").config();
@@ -23,6 +24,8 @@ const stripe = new Stripe(
   "sk_test_51TVpLJLxounSeQ56tm30fgr2hXqsHfgtdLSEeCFIYmmVENLLvueaSc9GtDKoSXKOGPJRLT42T746F1p6zxac2lxz00AmsMYpPk",
 );
 const app = express();
+app.use(bodyParser.json({ limit: '50mb' })); 
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(cors());
 app.use(express.json());
 
@@ -37,6 +40,14 @@ app.use("/api/contacts", contactRoutes);
 app.use("/api/students", studentRoutes);
 app.use("/api/watch-history", historyRoutes);
 app.use("/api/progress", watchProgressRoutes);
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: "pavir5587@gmail.com", // sender email
+    pass: "flii prgz xkjx zrhz", // Gmail App Password
+  },
+});
 
 const crypto = require("crypto");
 const razorpayKeyId = String(process.env.RAZORPAY_KEY_ID || "").trim();
@@ -334,6 +345,41 @@ app.get("/download-excel", (req, res) => {
   const filePath = path.join(__dirname, "locations.xlsx");
 
   res.download(filePath);
+});
+
+app.post('/api/send-certificate', async (req, res) => {
+  const { recipientEmail, recipientName, courseName, pdfData } = req.body;
+
+  if (!recipientEmail || !recipientName || !courseName || !pdfData) {
+    return res.status(400).json({ message: 'Missing required data: email, name, course, or pdfData.' });
+  }
+
+  // The base64 string provided by jsPDF includes a prefix (e.g., 'data:application/pdf;base64,')
+  // We need to strip that prefix for an attachment content.
+  const base64Data = pdfData.split('base64,')[1];
+
+  const mailOptions = {
+    from: '"LayArt Academy Administration" <YOUR_LAYART_ACADEMY_EMAIL@gmail.com>', // **REPLACE THIS**
+    to: recipientEmail,
+    subject: `Congratulations, ${recipientName}! Your Certificate for ${courseName}`,
+    text: `Hello ${recipientName},\n\nCongratulations on successfully completing the ${courseName} with LayArt Academy. Please find your official certificate attached as a PDF.\n\nWe hope this experience has been enriching and inspiring for your professional growth.\n\nBest Regards,\nThe LayArt Academy Team`,
+    attachments: [
+      {
+        filename: `LayArt_Certificate_${recipientName.replace(/\s+/g, '_')}.pdf`,
+        content: base64Data, // Strip the 'data:...;base64,' prefix
+        encoding: 'base64',
+      },
+    ],
+  };
+
+  try {
+    const info = await transporter.sendMail(mailOptions);
+    console.log('Email sent: ' + info.response);
+    return res.status(200).json({ message: 'Email sent successfully!' });
+  } catch (error) {
+    console.error('Error sending email:', error);
+    return res.status(500).json({ message: 'Internal server error while sending email.', error: error.toString() });
+  }
 });
 
 const PORT = process.env.PORT || 4000;
