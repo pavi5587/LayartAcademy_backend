@@ -18,14 +18,14 @@ exports.addContact = async (req, res) => {
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "academy@layart.in", // sender email
-        pass: "fvpx jllc ziru ddhr", // Gmail App Password
+        user: "layartacademy@gmail.com", // sender email
+        pass: "jqca bbsr deet efqn", // Gmail App Password
       },
     });
 
     // Email content
     const mailOptions = {
-      from: "academy@layart.in",
+      from: '"Layart Academy" <layartacademy@gmail.com>',
       to: email, // recipient
       subject: `New Contact Form: ${subject}`,
       text: `
@@ -39,6 +39,7 @@ exports.addContact = async (req, res) => {
       `,
     };
 
+    console.log("Sent:", mailOptions.messageId);
     await transporter.sendMail(mailOptions);
 
     res.json({ success: true, message: "Email sent successfully!" });

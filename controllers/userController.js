@@ -238,15 +238,15 @@ const forgotPassword = async (req, res) => {
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "academy@layart.in", // sender email
-        pass: "fvpx jllc ziru ddhr", // Gmail App Password
+        user: "layartacademy@gmail.com", // sender email
+        pass: "jqca bbsr deet efqn", // Gmail App Password
       },
     });
 
     const resetUrl = `https://layartacademy.in/reset-password/${token}`;
 
     await transporter.sendMail({
-      from: "academy@layart.in", // sender email
+     from: '"Layart Academy" <layartacademy@gmail.com>',
       to: email,
       subject: "Password Reset",
       html: `
