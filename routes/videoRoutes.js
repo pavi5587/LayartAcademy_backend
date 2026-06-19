@@ -11,6 +11,8 @@ const {
   deleteVideo,
 } = require("../controllers/videoController");
 
+const authenticateToken = require("../middleware/auth");
+
 const videoRouter = express.Router();
 
 // Multer storage setup
@@ -28,14 +30,14 @@ const upload = multer({ storage });
 
 // Routes
 // videoRouter.post("/", upload.single("videoFile"), createVideo);
-videoRouter.post("/", createVideo);
+videoRouter.post("/", authenticateToken, createVideo);
 videoRouter.get("/", getVideos);
-videoRouter.get("/:id", getVideoById);
+videoRouter.get("/:id", authenticateToken, getVideoById);
 
 // videoRouter.put("/:id", upload.single("videoFile"), updateVideo);
-videoRouter.put("/:id", updateVideo);
+videoRouter.put("/:id", authenticateToken, updateVideo);
 
-videoRouter.delete("/:id", deleteVideo);
+videoRouter.delete("/:id", authenticateToken, deleteVideo);
 
 module.exports = videoRouter;
 

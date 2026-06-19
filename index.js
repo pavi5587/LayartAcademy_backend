@@ -15,6 +15,8 @@ const studentRoutes = require("./routes/studentRoutes");
 const historyRoutes = require("./routes/watchHistoryRoutes");
 const Payment = require("./models/payment");
 const watchProgressRoutes = require("./routes/watchProgressRoutes");
+const studentHistoryRoutes = require("./routes/studentHistoryRoutes");
+
 const puppeteer = require("puppeteer");
 
 require("./db");
@@ -38,8 +40,9 @@ app.use("/api/courses", courseRoutes);
 app.use("/api/modules", moduleRoutes);
 app.use("/api/contacts", contactRoutes);
 app.use("/api/students", studentRoutes);
-app.use("/api/watch-history", historyRoutes);
+app.use("/api/watchHistory", historyRoutes);
 app.use("/api/progress", watchProgressRoutes);
+app.use("/api/studentHistory", studentHistoryRoutes);
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -351,11 +354,9 @@ app.post("/api/send-certificate", async (req, res) => {
   const { recipientEmail, recipientName, courseName, pdfData } = req.body;
 
   if (!recipientEmail || !recipientName || !courseName || !pdfData) {
-    return res
-      .status(400)
-      .json({
-        message: "Missing required data: email, name, course, or pdfData.",
-      });
+    return res.status(400).json({
+      message: "Missing required data: email, name, course, or pdfData.",
+    });
   }
 
   // The base64 string provided by jsPDF includes a prefix (e.g., 'data:application/pdf;base64,')
@@ -382,12 +383,10 @@ app.post("/api/send-certificate", async (req, res) => {
     return res.status(200).json({ message: "Email sent successfully!" });
   } catch (error) {
     console.error("Error sending email:", error);
-    return res
-      .status(500)
-      .json({
-        message: "Internal server error while sending email.",
-        error: error.toString(),
-      });
+    return res.status(500).json({
+      message: "Internal server error while sending email.",
+      error: error.toString(),
+    });
   }
 });
 

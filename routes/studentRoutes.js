@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const authenticateToken = require("../middleware/auth");
 
 const multer = require("multer");
 
@@ -25,14 +26,14 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // ROUTES
-router.post("/", upload.single("photo"), createStudent);
+router.post("/", authenticateToken, upload.single("photo"), createStudent);
 
-router.get("/", getStudents);
+router.get("/", authenticateToken, getStudents);
 
-router.get("/:id", getStudentById);
+router.get("/:id", authenticateToken, getStudentById);
 
-router.put("/:id", upload.single("photo"), updateStudent);
+router.put("/:id", authenticateToken, upload.single("photo"), updateStudent);
 
-router.delete("/:id", deleteStudent);
+router.delete("/:id", authenticateToken, deleteStudent);
 
 module.exports = router;
