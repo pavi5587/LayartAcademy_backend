@@ -37,8 +37,6 @@ const corsOptions = {
       "https://www.layartacademy.in",
     ],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allowed HTTP methods
-  allowedHeaders: ['Content-Type', 'Authorization'], // Headers your frontend sends
-  credentials: true // Crucial if you are sending cookies or session tokens
 };
 
 // Apply the CORS middleware BEFORE your routes
