@@ -31,20 +31,23 @@ app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 // app.use(cors());
 // Set up CORS options
 const corsOptions = {
-  origin: [
+    origin: [
       "http://localhost:3000",
       "https://layartacademy.in",
       "https://www.layartacademy.in",
     ],
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allowed HTTP methods
-  allowedHeaders: ['Content-Type', 'Authorization'], // Headers your frontend sends
-  credentials: false // Crucial if you are sending cookies or session tokens
+    credentials: true,
 };
 
-// Apply the CORS middleware BEFORE your routes
+// 1. Standard CORS middleware
 app.use(cors(corsOptions));
-app.use(express.json());
 
+// 2. EXPLICITLY handle preflight OPTIONS requests for all routes
+app.options('*', cors(corsOptions)); 
+
+// 3. Body parsers (Must come AFTER cors)
+app.use();
+express.json()
 // Serve uploaded files statically
 app.use("/uploads", express.static("uploads"));
 
