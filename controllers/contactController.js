@@ -39,7 +39,6 @@ exports.addContact = async (req, res) => {
       `,
     };
 
-    console.log("Sent:", mailOptions.messageId);
     await transporter.sendMail(mailOptions);
 
     res.json({ success: true, message: "Email sent successfully!" });

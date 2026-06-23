@@ -8,7 +8,6 @@ exports.createStudent = async (req, res) => {
     if (req.file) {
       data.photo = req.file.path;
     }
-    console.log("data", data);
     const student = await Student.create(data);
 
     res.status(201).json({

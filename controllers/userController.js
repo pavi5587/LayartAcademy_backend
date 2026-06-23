@@ -106,7 +106,6 @@ const googleRegister = async (req, res) => {
     req.body.id_token ||
     req.body.idToken;
 
-  console.log("Google Register Token ID:", tokenId);
   try {
     const googleData = await verifyGoogleToken(tokenId);
     const { email, name, sub: googleId } = googleData;

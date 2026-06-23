@@ -14,13 +14,7 @@ exports.createVideo = async (req, res) => {
       price,
       originalPrice,
     } = req.body;
-    // if (!req.file) {
-    //   return res.status(400).json({ error: "Video file is required" });
-    // }
-    // if (fileId) {
-    //   return res.status(400).json({ error: "Video file is required" });
-    // }
-    // console.log("req.file", req.file, req.body);
+   
     const video = new Video({
       title,
       course,
@@ -33,7 +27,6 @@ exports.createVideo = async (req, res) => {
       originalPrice,
       // videoFile: req.file.path,
     });
-    console.log("video", video);
 
     await video.save();
     res.status(201).json({ message: "Video uploaded successfully", video });
@@ -46,7 +39,6 @@ exports.createVideo = async (req, res) => {
 exports.getVideos = async (req, res) => {
   try {
     const videos = await Video.find();
-    console.log("videos",videos)
     res.json(videos);
   } catch (err) {
     res.status(500).json({ error: err.message });

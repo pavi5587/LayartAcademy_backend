@@ -93,7 +93,6 @@ app.post("/api/create-order", async (req, res) => {
     currency = "INR",
     receipt = `receipt_${Date.now()}`,
   } = req.body;
-  console.log("req.body", req.body);
   const amount = typeof rawAmount === "string" ? Number(rawAmount) : rawAmount;
 
   if (typeof amount !== "number" || Number.isNaN(amount)) {
@@ -117,7 +116,6 @@ app.post("/api/create-order", async (req, res) => {
       receipt,
       payment_capture: 1,
     });
-    console.log("order33", order);
 
     res.json({
       order_id: order.id,
@@ -147,7 +145,6 @@ app.post("/api/verify-payment", async (req, res) => {
       modules,
     } = req.body;
 
-    console.log("req.body", req.body);
 
     if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
       return res.status(400).json({
@@ -263,7 +260,6 @@ app.post("/api/verify-payment", async (req, res) => {
 
       const savedPayment = await payment.save();
 
-      console.log("PAYMENT SAVED =>", savedPayment);
 
       return res.json({
         success: true,
@@ -379,7 +375,6 @@ app.post("/api/send-certificate", async (req, res) => {
 
   try {
     const info = await transporter.sendMail(mailOptions);
-    console.log("Email sent: " + info.response);
     return res.status(200).json({ message: "Email sent successfully!" });
   } catch (error) {
     console.error("Error sending email:", error);
