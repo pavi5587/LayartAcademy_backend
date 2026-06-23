@@ -32,9 +32,9 @@ app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 // Set up CORS options
 const corsOptions = {
     origin: [
-      "http://localhost:3000",
-      "https://layartacademy.in",
-      "https://www.layartacademy.in",
+      "http://localhost:3000/",
+      "https://layartacademy.in/",
+      "https://www.layartacademy.in/",
     ],
     credentials: true,
 };
