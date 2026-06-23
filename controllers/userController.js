@@ -169,27 +169,14 @@ const googleLogin = async (req, res) => {
       return res.status(400).json({ message: "Google email is required" });
     }
 
-    let user = await User.findOne({ email });
+    const user = await User.findOne({ email });
 
-    // Auto-register if user doesn't exist
+    // 🛑 REMOVED AUTO-REGISTER LOGIC
+    // If the user doesn't exist, block the login and send an error message
     if (!user) {
-      const randomPassword = crypto.randomBytes(32).toString("hex");
-      const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(randomPassword, salt);
-
-      user = new User({
-        name: name || email.split("@")[0],
-        email,
-        password: hashedPassword,
-        mobileNumber: req.body.mobileNumber || "",
-        course: req.body.course || "",
-        isGoogleUser: true,
-        googleId,
-        professional: req.body.professional || "",
-        city: req.body.city || "",
+      return res.status(404).json({
+        message: "User not registered. Please register first.",
       });
-
-      await user.save();
     }
 
     const token = jwt.sign(
@@ -245,7 +232,7 @@ const forgotPassword = async (req, res) => {
     const resetUrl = `https://layartacademy.in/reset-password/${token}`;
 
     await transporter.sendMail({
-     from: '"Layart Academy" <layartacademy@gmail.com>',
+      from: '"Layart Academy" <layartacademy@gmail.com>',
       to: email,
       subject: "Password Reset",
       html: `

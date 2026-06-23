@@ -29,16 +29,20 @@ const app = express();
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 // app.use(cors());
-app.use(
-  cors({
-    origin: [
+// Set up CORS options
+const corsOptions = {
+  origin: [
       "http://localhost:3000",
       "https://layartacademy.in",
       "https://www.layartacademy.in",
     ],
-    credentials: true,
-  }),
-);
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allowed HTTP methods
+  allowedHeaders: ['Content-Type', 'Authorization'], // Headers your frontend sends
+  credentials: true // Crucial if you are sending cookies or session tokens
+};
+
+// Apply the CORS middleware BEFORE your routes
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Serve uploaded files statically
