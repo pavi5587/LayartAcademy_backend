@@ -43,11 +43,11 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 // 2. EXPLICITLY handle preflight OPTIONS requests for all routes
-app.options('*', cors(corsOptions)); 
-
+// New Express v5 syntax
+// Regex method (Very safe)
+app.options(/^.*$/, cors(corsOptions));
+app.use(express.json());
 // 3. Body parsers (Must come AFTER cors)
-app.use();
-express.json()
 // Serve uploaded files statically
 app.use("/uploads", express.static("uploads"));
 
