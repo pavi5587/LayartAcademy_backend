@@ -28,7 +28,17 @@ const stripe = new Stripe(
 const app = express();
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
-app.use(cors());
+// app.use(cors());
+app.use(
+  cors({
+    origin: [
+      "http://localhost:3000",
+      "https://layartacademy.in",
+      "https://www.layartacademy.in",
+    ],
+    credentials: true,
+  }),
+);
 app.use(express.json());
 
 // Serve uploaded files statically
@@ -145,7 +155,6 @@ app.post("/api/verify-payment", async (req, res) => {
       modules,
     } = req.body;
 
-
     if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
       return res.status(400).json({
         success: false,
@@ -259,7 +268,6 @@ app.post("/api/verify-payment", async (req, res) => {
       });
 
       const savedPayment = await payment.save();
-
 
       return res.json({
         success: true,
