@@ -28,24 +28,20 @@ const stripe = new Stripe(
 const app = express();
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
-// app.use(cors());
-// Set up CORS options
+
 const corsOptions = {
-    origin: [
-      "http://localhost:3000/",
-      "https://layartacademy.in/",
-      "https://www.layartacademy.in/",
-    ],
-    credentials: true,
+  origin: [
+    "http://localhost:3000", // Removed trailing slash
+    "https://layartacademy.in", // Removed trailing slash
+    "https://www.layartacademy.in", // Removed trailing slash
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true, // Keep this if your frontend sends cookies or authorization headers
+  optionsSuccessStatus: 200,
 };
 
-// 1. Standard CORS middleware
 app.use(cors(corsOptions));
 
-// 2. EXPLICITLY handle preflight OPTIONS requests for all routes
-// New Express v5 syntax
-// Regex method (Very safe)
-app.options(/^.*$/, cors(corsOptions));
 app.use(express.json());
 // 3. Body parsers (Must come AFTER cors)
 // Serve uploaded files statically
