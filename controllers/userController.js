@@ -71,31 +71,86 @@ const postUser = async (req, res) => {
       password: hashedPassword,
       mobileNumber,
       course,
+      professional, // ← was missing
+      city,         // ← was missing
     });
 
     await newUser.save();
     res.status(201).json({ message: "User Registered" });
   } catch (error) {
+    console.error("Register error:", error);
     res.status(400).json({ message: "Error Registering User" });
   }
 };
 
 const getUser = async (req, res) => {
-  const { email, password } = req.body;
-  const user = await User.findOne({ email });
+  const { email, mobileNumber, password } = req.body;
 
-  if (!user) return res.status(400).json({ message: "User Not Found" });
+  if (!password || (!email && !mobileNumber)) {
+    return res.status(400).json({ 
+      message: "Please provide email or mobile number with password" 
+    });
+  }
 
-  const isMatch = await bcrypt.compare(password, user.password);
-  if (!isMatch) return res.status(400).json({ message: "Invalid Credentials" });
+  try {
+    let user;
 
-  const token = jwt.sign(
-    { id: user._id, email: user.email },
-    process.env.JWT_SECRET,
-    { expiresIn: "5h" },
-  );
+    if (email) {
+      user = await User.findOne({ email });
+      if (!user) return res.status(400).json({ message: "User Not Found" });
 
-  res.json({ token, user: sanitizeUser(user) });
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) return res.status(400).json({ message: "Invalid Credentials" });
+
+    } else {
+      // Normalize number
+      const stripped = mobileNumber
+        .replace(/\s+/g, "")
+        .replace(/^\+91/, "")
+        .replace(/^0/, "");
+
+      // Get ALL users with this mobile number
+      const users = await User.find({
+        mobileNumber: {
+          $in: [
+            stripped,
+            `+91${stripped}`,
+            `0${stripped}`,
+            `+91 ${stripped}`,
+          ]
+        }
+      });
+
+      if (!users || users.length === 0) {
+        return res.status(400).json({ message: "User Not Found" });
+      }
+
+      // Find the one whose password actually matches
+      for (const u of users) {
+        const isMatch = await bcrypt.compare(password, u.password);
+        if (isMatch) {
+          user = u;
+          break;
+        }
+      }
+
+      if (!user) {
+        return res.status(400).json({ message: "Invalid Credentials" });
+      }
+    }
+
+    const token = jwt.sign(
+      { id: user._id, email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "5h" }
+    );
+
+    res.json({ token, user: sanitizeUser(user) });
+
+  } catch (error) {
+    console.error("Login error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 };
 
 const googleRegister = async (req, res) => {
