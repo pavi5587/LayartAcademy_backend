@@ -16,6 +16,7 @@ const historyRoutes = require("./routes/watchHistoryRoutes");
 const Payment = require("./models/payment");
 const watchProgressRoutes = require("./routes/watchProgressRoutes");
 const studentHistoryRoutes = require("./routes/studentHistoryRoutes");
+const enrollRoutes = require("./routes/enrollRoutes");
 
 const puppeteer = require("puppeteer");
 
@@ -56,6 +57,7 @@ app.use("/api/students", studentRoutes);
 app.use("/api/watchHistory", historyRoutes);
 app.use("/api/progress", watchProgressRoutes);
 app.use("/api/studentHistory", studentHistoryRoutes);
+app.use("/api/enroll", enrollRoutes);
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
