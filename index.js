@@ -43,7 +43,7 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-app.options(/(.*)/, cors(corsOptions));
+// app.options(/(.*)/, cors(corsOptions));
 
 app.use(express.json());
 // 3. Body parsers (Must come AFTER cors)
