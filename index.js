@@ -36,12 +36,14 @@ const corsOptions = {
     "https://layartacademy.in", // Removed trailing slash
     "https://www.layartacademy.in", // Removed trailing slash
   ],
-  methods: ["GET", "POST", "PUT", "DELETE"],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   credentials: true, // Keep this if your frontend sends cookies or authorization headers
   optionsSuccessStatus: 200,
 };
 
 app.use(cors(corsOptions));
+
+app.options(/(.*)/, cors(corsOptions));
 
 app.use(express.json());
 // 3. Body parsers (Must come AFTER cors)
