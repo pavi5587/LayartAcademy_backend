@@ -30,14 +30,25 @@ const app = express();
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://layartacademy.in",
+  "https://www.layartacademy.in",
+];
+
 const corsOptions = {
-  origin: [
-    "http://localhost:3000",
-    "https://layartacademy.in",
-    "https://www.layartacademy.in",
-  ],
+  origin: function (origin, callback) {
+    // allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  credentials: true,
+  credentials: true, // Required for cookies/authorization headers
   allowedHeaders: ["Content-Type", "Authorization"],
   optionsSuccessStatus: 200,
 };
