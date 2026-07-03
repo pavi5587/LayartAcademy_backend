@@ -28,7 +28,7 @@ const upload = multer({ storage });
 // ROUTES
 router.post("/", authenticateToken, upload.single("photo"), createStudent);
 
-router.get("/", authenticateToken, getStudents);
+router.get("/", getStudents);
 
 router.get("/:id", authenticateToken, getStudentById);
 
